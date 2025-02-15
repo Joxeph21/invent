@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export type OptionsType = {
+type OptionsType = {
   value: string;
   label: string;
 };

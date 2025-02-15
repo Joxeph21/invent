@@ -1,4 +1,3 @@
-import React from "react";
 import { ProductType } from "./ProductItem";
 import { formatPrice } from "../utils/helper";
 import { GoKebabHorizontal } from "react-icons/go";

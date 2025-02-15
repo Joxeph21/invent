@@ -1,24 +1,8 @@
+import { OrderType } from "@/utils/Types";
 import { formatDate } from "../utils/helper";
 import { GoKebabHorizontal } from "react-icons/go";
 
-type OrderedItems = {
-  product_id: number;
-  product_image: string;
-  quantity: number;
-  price: number
-};
 
-export type OrderType = {
-  id: number | string;
-  customer_id: number | string;
-  customer_name: string;
-  customer_state: string;
-  customer_country: string;
-  status: "failed" | "processing" | "delivered" | "shipped";
-  items_ordered?: OrderedItems[];
-  created_at: string;
-  settled_at?: string;
-};
 
 interface OrderProps {
   order: OrderType;

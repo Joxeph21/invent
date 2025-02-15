@@ -3,9 +3,10 @@ import Empty from "../ui/Empty";
 import BoxBanner from "../ui/BoxBanner";
 import SearchBox from "../ui/SearchBox";
 import Filter from "../ui/Filter";
-import OrderItem, { OrderType } from "../ui/OrderItem";
+import OrderItem from "../ui/OrderItem";
 import { useSearchParams } from "react-router-dom";
 import EmptySearch from "../ui/EmptySearch";
+import { type OrderType } from "@/utils/Types";
 
 const options = [
   { value: "all", label: "all" },
@@ -212,6 +213,7 @@ export default function Orders() {
   const [searchParams] = useSearchParams("");
   const query = searchParams.get("query");
   const filterBy = searchParams.get("filterBy") || "";
+
   const filteredOrders = useMemo(() => {
     function filterOrders() {
       if (filterBy.trim()) {

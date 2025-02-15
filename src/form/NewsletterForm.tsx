@@ -1,7 +1,6 @@
-import React from "react";
 import Button from "../ui/Button";
 
-const NewsletterForm = () => {
+const NewsletterForm = ({selectedContacts = 0}: {selectedContacts: number}) => {
   return (
     <form className="flex flex-col w-full py-4 gap-6">
       <div className="flex flex-col gap-2">
@@ -31,7 +30,7 @@ const NewsletterForm = () => {
       </div>
 
       <Button type="primary" size="large" buttonType="submit">
-        Send
+        {`Send to selected contacts (${selectedContacts})`} 
       </Button>
     </form>
   );

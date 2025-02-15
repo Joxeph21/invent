@@ -8,6 +8,7 @@ module.exports = withMT({
   	extend: {
   		colors: {
   			brandGreen: '#2DAC5C',
+			brandBlack: "#1B1B1B",
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

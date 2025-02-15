@@ -41,6 +41,7 @@ const products: ProductType[] = [
   },
 ];
 
+
 export default function Products() {
   return (
     <BoxBanner>

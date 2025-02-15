@@ -1,23 +1,22 @@
 import { Switch, SwitchProps } from "@material-tailwind/react";
 import BoxBanner from "../ui/BoxBanner";
-import { OptionsType } from "../ui/Filter";
 import CustomSelect from "../ui/CustomSelect";
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
+import { OptionTypes } from "@/utils/Types";
 
 interface SwitchInterface extends SwitchProps {
   label?: string;
 }
 
+export const switchProps: SwitchInterface = {
+  color: "green",
+  ripple: false,
+  containerProps: {},
+  inputRef: null,
+};
 const Settings = () => {
-  const switchProps: SwitchInterface = {
-    color: "green",
-    ripple: false,
-    containerProps: {},
-    inputRef: null,
-  };
-
-  const currencyOptions: OptionsType[] = [
+  const currencyOptions: OptionTypes[] = [
     { value: "NGN", label: "Naira" },
     { value: "USD", label: "Dollar" },
     { value: "EUR", label: "Euro" },
@@ -40,11 +39,15 @@ const Settings = () => {
         </div>
         <div className="w-full flex items-center border-b rounded-md px-4 py-5 gap-10">
           <h2>Currency</h2>
-          <CustomSelect options={currencyOptions} />
+          <div>
+            <CustomSelect options={currencyOptions} />
+          </div>
         </div>
         <div className="w-full flex items-center border-b rounded-md px-4 py-5 gap-10">
           <h2>Language</h2>
-          <CustomSelect options={[{ value: "en-us", label: "English" }]} />
+          <div>
+            <CustomSelect options={[{ value: "en-us", label: "English" }]} />
+          </div>
         </div>
         <div className="w-full flex items-center border-b rounded-md px-4 py-5 gap-10">
           <Link to={"/"} className="text-brandGreen">
@@ -67,9 +70,6 @@ const Settings = () => {
           </Link>
         </div>
         <div className="w-full flex items-center border-b rounded-md px-4 py-5 gap-10">
-          <Button size="regular" type="danger">
-            Disable Account
-          </Button>
           <Button size="regular" type="danger">
             Delete Account
           </Button>

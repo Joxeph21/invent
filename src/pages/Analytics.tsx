@@ -1,8 +1,6 @@
 import {
   ChartContainer,
   type ChartConfig,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegendContent,
   ChartLegend,
 } from "@/components/ui/chart";
@@ -10,47 +8,23 @@ import BoxBanner from "../ui/BoxBanner";
 import type { OptionsType } from "../ui/Filter";
 import SortBy from "../ui/SortBy";
 import Card from "../ui/Card";
-import { FaArrowRightLong } from "react-icons/fa6";
 import { orders } from "./Orders";
-import { ExpenseType } from "../utils/Types";
+import { type ExpenseType, type salesAndExpensesType } from "../utils/Types";
 import { useSearchParams } from "react-router-dom";
-import {
-  eachDayOfInterval,
-  endOfMonth,
-  endOfYear,
-  format,
-  parseISO,
-  startOfMonth,
-  startOfWeek,
-  startOfYear,
-  subMonths,
-  subWeeks,
-  subYears,
-} from "date-fns";
+import { eachDayOfInterval, format, parseISO } from "date-fns";
 import {
   Area,
   AreaChart,
   CartesianGrid,
-  Legend,
-  ReferenceLine,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import MiniBox from "../ui/MiniBox";
 import { useMemo } from "react";
-import { formartPercentage } from "@/utils/helper";
+import { formartPercentage, GetChartRange, GetDateRange } from "@/utils/helper";
 
-export type salesAndExpensesType = {
-  id: number | string;
-  title: string;
-  amount: number;
-  outcome: "profit" | "loss" | "neutral";
-  percentage: string;
-  type: "sales" | "expenses" | "profit" | "kpi";
-  trend: "upward" | "downward" | "neutral";
-};
+
 
 const sortOptions: OptionsType[] = [
   { value: "all", label: "This Month" },
@@ -121,95 +95,11 @@ const expenses: ExpenseType[] = [
   },
 ];
 
-console.log(sales);
-console.log(expenses);
-
 export default function Analytics() {
   const [searchParams] = useSearchParams();
   const sortBy = searchParams.get("sortBy") || "this-month";
 
-  function GetChartRange() {
-    const now = new Date();
-    switch (sortBy) {
-      case "ytd": {
-        const start = startOfYear(now);
-        return `${format(start, "MMM yyyy")} - ${format(now, "MMM yyyy")}`;
-      }
-      case "last-year": {
-        const start = startOfYear(subYears(now, 1));
-        const end = endOfYear(subYears(now, 1));
-        return `${format(start, "MMM yyyy")} - ${format(end, "MMM yyyy")}`;
-      }
-      case "this-week": {
-        const start = startOfWeek(now, { weekStartsOn: 1 });
-        return `${format(start, "MMMM d, yyyy")} - ${format(
-          now,
-          "MMMM d, yyyy"
-        )}`;
-      }
-      case "last-week": {
-        const start = startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 });
-        const end = subWeeks(now, 1);
-        return `${format(start, "MMMM d, yyyy")} - ${format(
-          end,
-          "MMMM d, yyyy"
-        )}`;
-      }
-      case "this-month": {
-        const start = startOfMonth(now);
-        return `${format(start, "MMMM d, yyyy")} - ${format(
-          now,
-          "MMMM d, yyyy"
-        )}`;
-      }
-
-      case "last-month": {
-        const start = startOfMonth(subMonths(now, 1));
-        const end = endOfMonth(subMonths(now, 1));
-        return `${format(start, "MMMM d, yyyy")} - ${format(
-          end,
-          "MMMM d, yyyy"
-        )}`;
-      }
-      case "all-time":
-        return "All time";
-      default:
-        return "24 hours Ago";
-    }
-  }
-
-  function GetDateRange() {
-    const now = new Date();
-    switch (sortBy) {
-      case "ytd":
-        return { start: startOfYear(now), end: now };
-      case "last-year":
-        return {
-          start: startOfYear(subYears(now, 1)),
-          end: endOfYear(subYears(now, 1)),
-        };
-      case "this-week":
-        return { start: startOfWeek(now, { weekStartsOn: 1 }), end: now };
-      case "last-week":
-        return {
-          start: startOfWeek(subWeeks(now, 1), { weekStartsOn: 1 }),
-          end: subWeeks(now, 1),
-        };
-      case "this-month":
-        return { start: startOfMonth(now), end: now };
-      case "last-month":
-        return {
-          start: startOfMonth(subMonths(now, 1)),
-          end: endOfMonth(subMonths(now, 1)),
-        };
-      case "all-time":
-        return { start: new Date("2000-01-01"), end: now };
-      default:
-        return { start: now, end: now };
-    }
-  }
-
-  const dateRange = GetDateRange();
+  const dateRange = GetDateRange(sortBy);
 
   const filteredSales = useMemo(
     () =>
@@ -360,7 +250,7 @@ export default function Analytics() {
       {/*Chart */}
       <div className="bg-white px-3 w-full relative py-6 flex flex-col gap-6 h-full min-h-96 rounded-md shadow-md">
         <h1 className="text-[#212121] text-base font-bold ">
-          Sales and Expense Chart from {GetChartRange()}
+          Sales and Expense Chart from {GetChartRange(sortBy)}
         </h1>
         <div className="w-full h-full ">
           <ChartContainer
@@ -385,10 +275,12 @@ export default function Analytics() {
         </div>
       </div>
 
-      <div className="flex w-full gap-8">
-        <MiniBox title="Recent Sales"  />
+      <div className="flex w-full flex-wrap gap-8">
+        <MiniBox title="Recent Sales" />
         <MiniBox title="Recent Expenses" />
         <MiniBox title="Stock Count" />
+        <MiniBox title="Trending Products" />
+        <MiniBox title="Unsuccesful Products" />
       </div>
     </BoxBanner>
   );

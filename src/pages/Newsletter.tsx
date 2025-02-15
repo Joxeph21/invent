@@ -6,13 +6,14 @@ import Button from "../ui/Button";
 import NewsletterForm from "../form/NewsletterForm";
 import Empty from "../ui/Empty";
 import { useSearchParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import EmptySearch from "../ui/EmptySearch";
 
 export default function Newsletter() {
   const subscribers = customers.filter((customer) => customer.isSubscribed);
   const [searchParams] = useSearchParams();
   const query = searchParams.get("query");
+  const [selected, setSelected] = useState(0)
 
   const searchedResults = useMemo(() => {
     if (!query) return subscribers;
@@ -29,14 +30,14 @@ export default function Newsletter() {
       </div>
       <div className="w-full  grid gap-4  grid-cols-[24rem_auto]">
         <div className="bg-white p-4 rounded-md order-2 shadow-md">
-          <div className="space-y-2 border-b pb-3">
+          <div className="space-y-2 border-b">
             <h2 className="font-semibold text-lg">Send a Newsletter</h2>
             <p className="text-gray-600 font-semibold text-xs">
               Send an email newsletter to all contacts or selected contacts
             </p>
           </div>
 
-          <NewsletterForm />
+          <NewsletterForm selectedContacts={selected} />
         </div>
         <aside className="bg-white flex flex-col gap-4 p-4 rounded-md shadow-md">
           <div className="space-y-2">
@@ -49,7 +50,7 @@ export default function Newsletter() {
                 <input type="checkbox" className="cursor-pointer" />
                 <label htmlFor="checkbox">Select all</label>
               </span>
-              <span className="text-brandGreen">(0) Selected</span>
+              <span className="text-brandGreen">({selected}) Selected</span>
               <span className="text-brandGreen font-semibold">
                 ({subscribers.length}) Contacts Found
               </span>
@@ -69,9 +70,9 @@ export default function Newsletter() {
               </ul>
             )}
           </div>
-          {/* <Button size="large" type="primary">
+          <Button size="large" type="primary">
             Add Contact
-          </Button> */}
+          </Button>
         </aside>
       </div>
     </BoxBanner>

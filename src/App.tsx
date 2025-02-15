@@ -2,18 +2,37 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 import Overview from "./pages/Overview";
 import Settings from "./pages/Settings";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Analytics from "./pages/Analytics";
 import Products from "./pages/Products";
 import CustomersPage from "./pages/CustomersPage";
 import Orders from "./pages/Orders";
+import Login from "./pages/Login";
 import Newsletter from "./pages/Newsletter";
 import { ThemeProvider } from "@material-tailwind/react";
+import SignUp from "./pages/SignUp";
+import AuthCallback from "./components/AuthCallback";
+import CompleteProfile from "./pages/CompleteProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      staleTime: 120000,
+    },
+  },
+});
 
 export default function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <AppLayout />,
+      element: (
+        <ProtectedRoute>
+          <AppLayout />
+        </ProtectedRoute>
+      ),
       children: [
         {
           index: true,
@@ -45,11 +64,29 @@ export default function App() {
         },
       ],
     },
+    {
+      path: "complete-profile",
+      element: <CompleteProfile />,
+    },
+    {
+      path: "login",
+      element: <Login />,
+    },
+    {
+      path: "auth-callback",
+      element: <AuthCallback />,
+    },
+    {
+      path: "signup",
+      element: <SignUp />,
+    },
   ]);
 
   return (
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
